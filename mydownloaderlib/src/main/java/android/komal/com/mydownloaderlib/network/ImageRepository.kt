@@ -9,14 +9,16 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 
 class ImageRepository {
-    private val gitHubService: ApiService? = null
+
+    private val api : ApiService by lazy  {ServiceProvider.provideRetrofit().create(ApiService::class.java) }
 
     fun getProjectList(url: String): LiveData<Bitmap> {
         val data = MutableLiveData<Bitmap>()
 
-        gitHubService!!.getImageData(url).enqueue(object : Callback<ResponseBody> {
+        api!!.getImageData(url).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
@@ -55,6 +57,7 @@ class ImageRepository {
                 return projectRepository as ImageRepository
             }
     }
+
 
     // …
 }
